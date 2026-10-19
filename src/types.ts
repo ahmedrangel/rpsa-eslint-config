@@ -29,4 +29,9 @@ export interface ConfigOptions {
    * @default false
    */
   suitescript?: boolean;
+  /**
+   * Ignore specific files or patterns.
+   * @default []
+   */
+  ignores?: string[];
 }

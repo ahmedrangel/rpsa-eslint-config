@@ -34,5 +34,9 @@ export const rpsa = (options?: ConfigOptions): FlatConfigComposer => {
     c.append(scoped(suitescript(), scriptGlobs));
   }
 
+  if (options?.ignores) {
+    c.append({ ignores: options.ignores });
+  }
+
   return c;
 };
