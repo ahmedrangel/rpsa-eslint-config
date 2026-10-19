@@ -1,17 +1,33 @@
-name: release
+name: ci
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
-permissions:
-  contents: write
-  id-token: write
+# https://github.com/vitejs/vite/blob/main/.github/workflows/ci.yml
+env:
+  # 7 GiB by default on GitHub, setting to 6 GiB
+  # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
+  NODE_OPTIONS: --max-old-space-size=6144
+
+# Remove default permissions of GITHUB_TOKEN for security
+# https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name != 'push' }}
 
 jobs:
-  release:
+  lint:
+    # autofix workflow will be triggered instead for PRs
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/setup@v3
@@ -20,12 +36,22 @@ jobs:
           runtime: node@lts
           cache: true
 
-      - run: pnpm config set registry https://registry.npmjs.org
+      - name: 🔎 Lint
+        run: node --run lint
 
-      - name: 🚀 Publish npm package
-        run: pnpm publish --access public --no-git-checks
+  test:
+    runs-on: ubuntu-latest
 
-      - name: 📝 Publish GitHub release notes
-        env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node --run release:github
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/setup@v3
+
+        with:
+          runtime: node@lts
+          cache: true
+
+    # - name: 🧪 Run test suite
+    #   run: node --run test
+
+      - name: 🧪 Test types
+        run: node --run test:types
