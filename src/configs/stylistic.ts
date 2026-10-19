@@ -2,10 +2,26 @@ import type { ConfigWithExtends } from "eslint-flat-config-utils";
 
 export const stylistic = async (): Promise<ConfigWithExtends> => {
   const { default: pluginStylistic } = await import("@stylistic/eslint-plugin");
+  const indentRule = pluginStylistic.rules.indent;
+
+  const pluginStylisticPatch = {
+    ...pluginStylistic,
+    rules: {
+      ...pluginStylistic.rules,
+      indent: {
+        ...indentRule,
+        create (context: Parameters<typeof indentRule.create>[0]) {
+          // Skip indentation for documents/html containing a top-level Document node
+          if (context.sourceCode.ast.body.some(node => String(node.type) === "Document")) return {};
+          return indentRule.create(context);
+        }
+      }
+    }
+  };
 
   const config: ConfigWithExtends = {
     plugins: {
-      "@stylistic": pluginStylistic
+      "@stylistic": pluginStylisticPatch
     },
     rules: {
       "@stylistic/indent": ["error", 2, { SwitchCase: 1 }],
