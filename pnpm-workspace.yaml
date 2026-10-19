@@ -1,0 +1,6 @@
+minimumReleaseAge: 0
+shamefullyHoist: true
+strictPeerDependencies: false
+
+allowBuilds:
+  unrs-resolver: false

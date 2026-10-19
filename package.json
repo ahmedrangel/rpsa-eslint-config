@@ -1,0 +1,69 @@
+{
+	"name": "rpsa-eslint-config",
+	"version": "0.0.0",
+	"description": "RPSA ESLint configuration preset.",
+	"type": "module",
+	"license": "MIT",
+	"keywords": [
+		"eslint-config"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ahmedrangel/rpsa-eslint-config.git"
+	},
+	"homepage": "https://github.com/ahmedrangel/rpsa-eslint-config",
+	"author": {
+		"name": "Ahmed Rangel",
+		"email": "ahmedrangel@gmail.com",
+		"url": "https://ahmedrangel.com"
+	},
+	"main": "./dist/index.mjs",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.mts",
+			"default": "./dist/index.mjs"
+		}
+	},
+	"types": "./dist/index.d.mts",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "obuild",
+		"prepack": "node --run build",
+		"release": "node --run checks && changelogen --release --push --no-github",
+		"release:github": "changelogen gh release",
+		"lint": "eslint",
+		"lint:fix": "eslint --fix",
+		"test": "vitest run --reporter=verbose --coverage",
+		"test:types": "tsc --noEmit",
+		"test:watch": "vitest watch",
+		"checks": "node --run lint && node --run test:types && node --run build"
+	},
+	"peerDependencies": {
+		"eslint": "^9.10.0 || ^10.0.0"
+	},
+	"dependencies": {
+		"@eslint/js": "^10.0.1",
+		"@html-eslint/eslint-plugin": "0.67.0",
+		"@html-eslint/parser": "0.67.0",
+		"@stylistic/eslint-plugin": "^5.10.0",
+		"@typescript-eslint/eslint-plugin": "^8.72.0",
+		"@typescript-eslint/parser": "^8.72.0",
+		"eslint": "^10.13.0",
+		"eslint-config-flat-gitignore": "^2.4.0",
+		"eslint-flat-config-utils": "^3.2.0",
+		"eslint-plugin-html": "^8.2.1",
+		"eslint-plugin-import-x": "^4.17.1",
+		"eslint-plugin-suitescript": "^3.0.0",
+		"globals": "^17.13.0",
+		"typescript-eslint": "^8.72.0"
+	},
+	"devDependencies": {
+		"@types/node": "^26.6.5",
+		"changelogen": "^0.6.2",
+		"obuild": "^0.4.45",
+		"typescript": "^6.0.3"
+	},
+	"packageManager": "pnpm@12.14.0"
+}
