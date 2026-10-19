@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.1.2
+
+[compare changes](https://github.com/ahmedrangel/rpsa-eslint-config/compare/v0.1.1...v0.1.2)
+
+### 🚀 Enhancements
+
+- **config:** Support ignore patterns ([75db626](https://github.com/ahmedrangel/rpsa-eslint-config/commit/75db626))
+
+### ❤️ Contributors
+
+- Ahmed Rangel ([@ahmedrangel](https://github.com/ahmedrangel))
+
 ## v0.1.1
 
 [compare changes](https://github.com/ahmedrangel/rpsa-eslint-config/compare/v0.1.0...v0.1.1)
