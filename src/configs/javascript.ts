@@ -2,16 +2,9 @@ import type { ConfigWithExtends } from "eslint-flat-config-utils";
 
 // Inspired by https://github.com/nuxt/eslint/blob/main/packages/eslint-config/src/configs/javascript.ts
 export const javascript = async (): Promise<ConfigWithExtends> => {
-  const [
-    { default: pluginESLint },
-    { default: globals }
-  ] = await Promise.all([
-    import("@eslint/js"),
-    import("globals")
-  ]);
+  const { default: globals } = await import("globals");
 
   const config: ConfigWithExtends = {
-    ...pluginESLint.configs.recommended,
     languageOptions: {
       ecmaVersion: 2022,
       parserOptions: {
