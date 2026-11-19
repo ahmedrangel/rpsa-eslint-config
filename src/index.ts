@@ -7,36 +7,32 @@ import { globs } from "./utils";
 
 const scoped = async (config: Awaitable<ConfigWithExtends>, files: string[]): Promise<ConfigWithExtends> => ({ ...await config, files });
 
-export const rpsa = (options?: ConfigOptions): FlatConfigComposer => {
-  const c = composer();
-  const scriptGlobs = [...globs.javascript, ...(options?.typescript ? globs.typescript : [])];
+export const rpsa = (options: ConfigOptions = {}): FlatConfigComposer => {
+  const { ignores, ...flags } = options;
+  const scriptGlobs = [
+    ...globs.javascript,
+    ...(flags.typescript ? globs.typescript : []),
+    ...(flags.html ? globs.html : [])
+  ];
 
-  if (options?.html) {
-    scriptGlobs.push(...globs.html);
-    c.append(scoped(html(), globs.html));
+  // Order matters: later configs override earlier ones.
+  const presets: { enabled?: boolean, config: () => Awaitable<ConfigWithExtends>, files: string[] }[] = [
+    { enabled: flags.html, config: html, files: globs.html },
+    { enabled: true, config: javascript, files: scriptGlobs },
+    { enabled: flags.typescript, config: typescript, files: globs.typescript },
+    { enabled: flags.imports, config: imports, files: scriptGlobs },
+    { enabled: flags.stylistic, config: stylistic, files: scriptGlobs },
+    { enabled: flags.suitescript, config: suitescript, files: scriptGlobs }
+  ];
+
+  const c = composer(gitignore());
+  if (ignores) {
+    c.append({ ignores });
   }
-
-  c.append(gitignore(), scoped(javascript(), scriptGlobs));
-
-  if (options?.typescript) {
-    c.append(scoped(typescript(), globs.typescript));
+  for (const { enabled, config, files } of presets) {
+    if (enabled) {
+      c.append(scoped(config(), files));
+    }
   }
-
-  if (options?.imports) {
-    c.append(scoped(imports(), scriptGlobs));
-  }
-
-  if (options?.stylistic) {
-    c.append(scoped(stylistic(), scriptGlobs));
-  }
-
-  if (options?.suitescript) {
-    c.append(scoped(suitescript(), scriptGlobs));
-  }
-
-  if (options?.ignores) {
-    c.append({ ignores: options.ignores });
-  }
-
   return c;
 };
