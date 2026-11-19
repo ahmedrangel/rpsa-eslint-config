@@ -33,15 +33,19 @@ describe("stylistic", () => {
     expect(rules).not.toContain("@stylistic/indent");
   });
 
-  it("uses unix linebreaks outside windows", async () => {
-    const platform = Object.getOwnPropertyDescriptor(process, "platform")!;
-    Object.defineProperty(process, "platform", { value: "linux" });
+  it.each([
+    ["win32", "windows"],
+    ["linux", "unix"],
+    ["darwin", "unix"]
+  ])("uses %s -> %s linebreaks", async (platform, style) => {
+    const original = Object.getOwnPropertyDescriptor(process, "platform")!;
+    Object.defineProperty(process, "platform", { value: platform });
     try {
       const config = await stylistic();
-      expect(config.rules?.["@stylistic/linebreak-style"]).toEqual(["error", "unix"]);
+      expect(config.rules?.["@stylistic/linebreak-style"]).toEqual(["error", style]);
     }
     finally {
-      Object.defineProperty(process, "platform", platform);
+      Object.defineProperty(process, "platform", original);
     }
   });
 });
