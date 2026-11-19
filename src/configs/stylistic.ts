@@ -34,19 +34,23 @@ export const stylistic = async (): Promise<ConfigWithExtends> => {
       "@stylistic/multiline-ternary": ["error", "never"],
       "@stylistic/member-delimiter-style": ["error", { multiline: { delimiter: "semi" }, singleline: { delimiter: "comma" } }],
       "@stylistic/arrow-spacing": ["error", { before: true, after: true }],
-      "@stylistic/brace-style": ["error", "1tbs", { allowSingleLine: true }],
+      "@stylistic/brace-style": ["error", "stroustrup", { allowSingleLine: true }],
       "@stylistic/no-multi-spaces": "error",
       "@stylistic/space-before-blocks": "error",
       "@stylistic/no-trailing-spaces": "error",
-      "@stylistic/array-bracket-spacing": ["error", "never"],
       "@stylistic/block-spacing": ["error", "always"],
       "@stylistic/comma-spacing": ["error", { after: true, before: false }],
       "@stylistic/comma-style": ["error", "last"],
       "@stylistic/key-spacing": ["error", { afterColon: true, beforeColon: false }],
       "@stylistic/keyword-spacing": ["error", { after: true, before: true }],
-      "@stylistic/object-curly-newline": "error",
-      "@stylistic/object-curly-spacing": ["error", "always"],
-      "@stylistic/object-property-newline": ["error", { allowAllPropertiesOnSameLine: true }],
+      "@stylistic/list-style": ["error", {
+        singleLine: { spacing: "never" },
+        overrides: {
+          "{}": { singleLine: { spacing: "always" } },
+          "()": "off",
+          "<>": "off"
+        }
+      }],
       "@stylistic/space-in-parens": ["error", "never"],
       "@stylistic/no-multiple-empty-lines": ["error", { max: 1 }],
       "@stylistic/quote-props": ["error", "consistent-as-needed"],
