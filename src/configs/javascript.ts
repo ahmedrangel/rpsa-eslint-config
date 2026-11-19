@@ -28,8 +28,7 @@ export const javascript = async (): Promise<ConfigWithExtends> => {
         ...globals.node,
         document: "readonly",
         navigator: "readonly",
-        window: "readonly",
-        defineNuxtConfig: "readonly"
+        window: "readonly"
       }
     },
     linterOptions: {
