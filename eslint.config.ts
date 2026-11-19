@@ -5,5 +5,6 @@ export default rpsa({
   imports: true,
   stylistic: true,
   html: true,
-  suitescript: true
+  suitescript: true,
+  ignores: ["test/fixtures"]
 });
