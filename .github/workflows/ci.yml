@@ -50,8 +50,8 @@ jobs:
           runtime: node@lts
           cache: true
 
-    # - name: 🧪 Run test suite
-    #   run: node --run test
+      - name: 🧪 Run test suite
+        run: node --run test
 
       - name: 🧪 Test types
         run: node --run test:types
